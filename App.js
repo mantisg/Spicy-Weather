@@ -1,50 +1,53 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
   return (
-    <View style={styles.page}>
-      <View style={styles.header}>
-        <Header />
+    <View style={styles.container}>
+      <View style={styles.headBand}>
+        <Text>Icon</Text>
+        <Text style={styles.logo}>
+          Spicy Forecast
+        </Text>
+        <Text>Search</Text>
       </View>
-      <View style={styles.container}>
-        <Text>Lets get spicy!</Text>
-        <StatusBar style="auto" />
+      <View style={styles.main}>
+        <Text style={styles.mainText}>
+          Lets get spicy!
+        </Text>
       </View>
-    </View>
-  );
-}
-
-const Header = () => {
-  return (
-    <View>
-      <Text>
-        Spicy Forecast
-      </Text>
-      <StatusBar style="auto" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    backgroundColor: '#b40240',
-  },
-
   container: {
     flex: 1,
     backgroundColor: '#b40240',
     alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: 'bold',
   },
 
-  header: {
-    backgroundColor: '#eeeeee',
-    alignItems: 'center',
+  main: {
+    flex: 1,
     justifyContent: 'center',
+  },
+
+  mainText: {
     fontWeight: 'bold',
+    fontSize: '20px',
+  },
+
+  headBand: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#eeeeee',
+    width: '100%',
+  },
+
+  logo: {
+    fontFamily: '',
+    fontWeight: 'bold',
+    fontSize: '50px',
   },
 
 });
