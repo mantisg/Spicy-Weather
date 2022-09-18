@@ -1,29 +1,54 @@
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
+  const [isLoading, setLoading] = useState(true)
+  const [data, setData] = useState([])
+
+  const getLocations = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/locations')
+      const json = await response.json()
+      setData(json.data)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getLocations()
+  }, [])
+
   return (
-    <View style={styles.container}>
-      <View style={styles.headBand}>
-        <Text>Icon</Text>
-        <Text style={styles.logo}>
-          Spicy Forecast
-        </Text>
-        <Text>Search</Text>
-      </View>
+    <View>
+    {isLoading ? <Text>loading...</Text> : (
+      <View style={styles.container}>
+        <View style={styles.headBand}>
+          <Text>Icon</Text>
+          <Text style={styles.logo}>
+            Spicy Forecast
+          </Text>
+          <Text>Search</Text>
+        </View>
 
-      <View style={styles.main}>
-        <Text style={styles.mainText}>
-          Lets get spicy!
-        </Text>
-      </View>
+        <View style={styles.main}>
+          <Text style={styles.mainText}>
+            Lets get spicy!
+          </Text>
+        </View>
 
-      <View style={styles.tempElement}>
-        <Text>
-          Temperature Display
-        </Text>
+        <View style={styles.tempElement}>
+          <Text>
+            Temperature Display
+          </Text>
+        </View>
+        {data.map((i, k) => <Text key={k}>{i}</Text>)}
       </View>
+     )}
     </View>
-  );
+  )
 }
 
 const awesomeRed = '#b40240'
