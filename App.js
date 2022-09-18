@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
 export default function App() {
   const [isLoading, setLoading] = useState(true)
@@ -26,11 +26,11 @@ export default function App() {
     {isLoading ? <Text>loading...</Text> : (
       <View style={styles.container}>
         <View style={styles.headBand}>
-          <Text>Icon</Text>
+          <Button title='Menu' color={awesomeRed} />
           <Text style={styles.logo}>
             Spicy Forecast
           </Text>
-          <Text>Search</Text>
+          <Button title="Search" color={awesomeRed} />
         </View>
 
         <View style={styles.main}>
