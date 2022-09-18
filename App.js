@@ -10,19 +10,28 @@ export default function App() {
         </Text>
         <Text>Search</Text>
       </View>
+
       <View style={styles.main}>
         <Text style={styles.mainText}>
           Lets get spicy!
+        </Text>
+      </View>
+
+      <View style={styles.tempElement}>
+        <Text>
+          Temperature Display
         </Text>
       </View>
     </View>
   );
 }
 
+const awesomeRed = '#b40240'
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#b40240',
+    backgroundColor: awesomeRed,
     alignItems: 'center',
   },
 
@@ -48,6 +57,11 @@ const styles = StyleSheet.create({
     fontFamily: '',
     fontWeight: 'bold',
     fontSize: '50px',
+  },
+
+  tempElement: {
+    flexDirection: 'row',
+    backgroundColor: awesomeRed
   },
 
 });
