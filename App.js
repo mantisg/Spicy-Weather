@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, SearchBar } from 'react-native';
 
 export default function App() {
+
+  const [isSearching, setSearching] = useState(false)
   const [isLoading, setLoading] = useState(true)
   const [data, setData] = useState([])
 
@@ -30,7 +32,12 @@ export default function App() {
           <Text style={styles.logo}>
             Spicy Forecast
           </Text>
-          <Button title="Search" color={awesomeRed} />
+          {isSearching ? <TextInput
+            style={styles.searchBar}
+            placeholder="Search"
+          /> : (
+            <Button title="Search" color={awesomeRed} onPress={() => setSearching(true)} />
+          )}
         </View>
 
         <View style={styles.main}>
@@ -86,7 +93,13 @@ const styles = StyleSheet.create({
 
   tempElement: {
     flexDirection: 'row',
-    backgroundColor: awesomeRed
+    backgroundColor: awesomeRed,
+  },
+
+  searchBar: {
+    borderWidth: 1,
+    padding: 5,
+    color: awesomeRed,
   },
 
 });
