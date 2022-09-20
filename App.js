@@ -26,11 +26,12 @@ export default function App() {
     setValue(event.target.value);
   }
 
-  //const locationId = {'http://localhost:5000/weather/'{value}}
+  const databaseURL = 'http://localhost:5000/weather/'
+  const locationId = databaseURL + value
 
   const getLocations = async () => {
     try {
-      const response = await fetch('http://localhost:5000/locations')
+      const response = await fetch(locationId)
       const json = await response.json()
       setData(json.data)
     } catch (error) {
@@ -54,14 +55,15 @@ export default function App() {
             Spicy Forecast
           </Text>
           {isSearching ? 
-            <InputGroup style={{width: 254}}>
+            <InputGroup style={{width: 300}}>
+              <Button style={styles.button} onClick={()=> setSearching(false)}>X</Button>
               <Form.Control
                 style={styles.searchBar}
                 placeholder="Search"
                 onChange={handleChange}
                 value={value}
               />
-              <Button style={{backgroundColor: awesomeRed, width: 'auto'}} onClick={handleClick}>Clear</Button>
+              <Button style={styles.button} onClick={handleClick}>Clear</Button>
             </InputGroup>
           : (
             <Button style={{backgroundColor:awesomeRed, borderColor:awesomeRed}} onClick={()=> setSearching(true)}>Search</Button>
@@ -128,6 +130,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     color: awesomeRed,
+    width: 'auto',
+  },
+
+  button: {
+    backgroundColor: awesomeRed,
+    borderWidth: 1,
     width: 'auto',
   },
 
