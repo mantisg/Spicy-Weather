@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, TextInput, SearchBar } from 'react-native';
+import { 
+  StyleSheet,
+  Text,
+  View,
+  // Button,
+  TextInput,
+  SearchBar,
+} from 'react-native';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
 
 export default function App() {
 
@@ -28,7 +38,7 @@ export default function App() {
     {isLoading ? <Text>loading...</Text> : (
       <View style={styles.container}>
         <View style={styles.headBand}>
-          <Button title='Menu' color={awesomeRed} />
+          <Button style={{backgroundColor:awesomeRed, borderColor:awesomeRed}}>Menu</Button>
           <Text style={styles.logo}>
             Spicy Forecast
           </Text>
@@ -36,7 +46,7 @@ export default function App() {
             style={styles.searchBar}
             placeholder="Search"
           /> : (
-            <Button title="Search" color={awesomeRed} onPress={() => setSearching(true)} />
+            <Button style={{backgroundColor:awesomeRed, borderColor:awesomeRed}} onClick={()=> setSearching(true)}>Search</Button>
           )}
         </View>
 
