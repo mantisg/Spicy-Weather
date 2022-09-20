@@ -3,19 +3,30 @@ import {
   StyleSheet,
   Text,
   View,
-  // Button,
+// Button,
   TextInput,
   SearchBar,
 } from 'react-native';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 export default function App() {
 
   const [isSearching, setSearching] = useState(false)
   const [isLoading, setLoading] = useState(true)
   const [data, setData] = useState([])
+  const [value, setValue] = useState("")
+  const handleClick = (value) => {
+    setValue("");
+  }
+  const handleChange=(event) => {
+    setValue(event.target.value);
+  }
+
+  //const locationId = {'http://localhost:5000/weather/'{value}}
 
   const getLocations = async () => {
     try {
@@ -42,10 +53,17 @@ export default function App() {
           <Text style={styles.logo}>
             Spicy Forecast
           </Text>
-          {isSearching ? <TextInput
-            style={styles.searchBar}
-            placeholder="Search"
-          /> : (
+          {isSearching ? 
+            <InputGroup style={{width: 254}}>
+              <Form.Control
+                style={styles.searchBar}
+                placeholder="Search"
+                onChange={handleChange}
+                value={value}
+              />
+              <Button style={{backgroundColor: awesomeRed, width: 'auto'}} onClick={handleClick}>Clear</Button>
+            </InputGroup>
+          : (
             <Button style={{backgroundColor:awesomeRed, borderColor:awesomeRed}} onClick={()=> setSearching(true)}>Search</Button>
           )}
         </View>
@@ -110,6 +128,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     color: awesomeRed,
+    width: 'auto',
   },
 
 });
