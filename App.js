@@ -16,22 +16,32 @@ import InputGroup from 'react-bootstrap/InputGroup';
 export default function App() {
 
   const [isSearching, setSearching] = useState(false)
+  const [isInMenu, setMenu] = useState(false)
   const [isLoading, setLoading] = useState(true)
   const [data, setData] = useState([])
-  const [value, setValue] = useState("")
+  const [searchText, setSearchText] = useState("")
   const handleClick = (value) => {
     setValue("");
-  }
-  const handleChange=(event) => {
-    setValue(event.target.value);
-  }
+  };
 
-  const databaseURL = 'http://localhost:5000/weather/'
-  const locationId = databaseURL + value
+  const filterLocations = data.filter(({data}) => {
+    data.toLowerCase().includes(searchText.toLowerCase())
+  };
+
+  const weatherPath = (searchText) => {
+    return `http://localhost:5000/weather/${searchText}`
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    <View style={styles.tempDisplay}>
+      console.log()
+    </View>
+  };
 
   const getLocations = async () => {
     try {
-      const response = await fetch(locationId)
+      const response = await fetch("http://localhost:5000/locations")
       const json = await response.json()
       setData(json.data)
     } catch (error) {
@@ -47,26 +57,30 @@ export default function App() {
 
   return (
     <View>
-    {isLoading ? <Text>loading...</Text> : (
+    {isLoading ? <Text style={styles.loading}>loading...</Text> : (
       <View style={styles.container}>
         <View style={styles.headBand}>
-          <Button style={{backgroundColor:awesomeRed, borderColor:awesomeRed}}>Menu</Button>
+          {isInMenu ? <Text>Oh Shit</Text> : 
+            <Button style={styles.mainButtons} onClick={() => setMenu(true)}>Menu</Button>
+          }
           <Text style={styles.logo}>
             Spicy Forecast
           </Text>
           {isSearching ? 
-            <InputGroup style={{width: 300}}>
-              <Button style={styles.button} onClick={()=> setSearching(false)}>X</Button>
-              <Form.Control
-                style={styles.searchBar}
-                placeholder="Search"
-                onChange={handleChange}
-                value={value}
-              />
-              <Button style={styles.button} onClick={handleClick}>Clear</Button>
-            </InputGroup>
+            <Form onSubmit={handleSubmit}>
+              <InputGroup style={{width: 300}}>
+                <Button style={styles.button} onClick={()=> setSearching(false)}>X</Button>
+                <Form.Control
+                  style={styles.searchBar}
+                  placeholder="Search"
+                  onChange={({ target }) => setSearchText(target.value)}
+                  value={text}
+                />
+                <Button style={styles.button} onClick={handleClick}>Clear</Button>
+              </InputGroup>
+            </Form>
           : (
-            <Button style={{backgroundColor:awesomeRed, borderColor:awesomeRed}} onClick={()=> setSearching(true)}>Search</Button>
+            <Button style={styles.mainButtons} onClick={()=> setSearching(true)}>Search</Button>
           )}
         </View>
 
@@ -80,8 +94,10 @@ export default function App() {
           <Text>
             Temperature Display
           </Text>
+          {filterLocations.map(({data}) => (
+              <Text>{data}</Text>
+            ))}
         </View>
-        {data.map((i, k) => <Text key={k}>{i}</Text>)}
       </View>
      )}
     </View>
@@ -133,10 +149,26 @@ const styles = StyleSheet.create({
     width: 'auto',
   },
 
+  mainButtons: {
+    backgroundColor: awesomeRed,
+    borderColor: awesomeRed,
+  },
+
   button: {
     backgroundColor: awesomeRed,
     borderWidth: 1,
     width: 'auto',
+  },
+
+  loading: {
+    color: awesomeRed,
+    fontSize: 50,
+    textAlign: 'center',
+  },
+
+  tempDisplay: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
 });
