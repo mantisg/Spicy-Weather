@@ -79,7 +79,7 @@ export default function App() {
               </InputGroup>
               {!hasSubmittedSearch ? <></> : <Form.Select>
                 {searchResult.length === 0 ? <option>No Locations Found</option> : (
-                  searchResult.map((l, key) => <option value={l}>{displaySearchResult(l)}</option>)
+                  searchResult.map((l, key) => <option key={key} value={l}>{displaySearchResult(l)}</option>)
                 )}
               </Form.Select>}
             </Form>
