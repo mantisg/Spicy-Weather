@@ -16,34 +16,37 @@ import InputGroup from 'react-bootstrap/InputGroup';
 export default function App() {
 
   const [isSearching, setSearching] = useState(false)
+  const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false)
   const [isInMenu, setMenu] = useState(false)
   const [isLoading, setLoading] = useState(true)
-  const [data, setData] = useState([])
+  const [locations, setLocations] = useState([])
   const [searchText, setSearchText] = useState("")
-  const handleClick = (value) => {
-    setValue("");
-  };
+  const [searchResult, setSearchResult] = useState([])
 
-  const filterLocations = data.filter(({data}) => {
-    data.toLowerCase().includes(searchText.toLowerCase())
-  };
+  // const weatherPath = (searchText) => {
+  //   return `http://localhost:5000/weather/${searchText}`
+  // };
 
-  const weatherPath = (searchText) => {
-    return `http://localhost:5000/weather/${searchText}`
-  };
+  const displaySearchResult = words => {
+    return words.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+  }
+
+  const handleSearchClose = () => {
+    setSearchText("")
+    setHasSubmittedSearch(false)
+  }
 
   const handleSubmit = event => {
     event.preventDefault();
-    <View style={styles.tempDisplay}>
-      console.log()
-    </View>
+    setHasSubmittedSearch(true)
+    setSearchResult(locations.filter(l => l.toLowerCase() === searchText.toLowerCase().replace(' ', '-')))
   };
 
   const getLocations = async () => {
     try {
       const response = await fetch("http://localhost:5000/locations")
       const json = await response.json()
-      setData(json.data)
+      setLocations(json.data)
     } catch (error) {
       console.error(error)
     } finally {
@@ -66,21 +69,24 @@ export default function App() {
           <Text style={styles.logo}>
             Spicy Forecast
           </Text>
-          {isSearching ? 
-            <Form onSubmit={handleSubmit}>
+          {!isSearching ? <Button style={styles.mainButtons} onClick={()=> setSearching(true)}>Search</Button> :
+            (<Form onSubmit={handleSubmit}>
               <InputGroup style={{width: 300}}>
                 <Button style={styles.button} onClick={()=> setSearching(false)}>X</Button>
                 <Form.Control
                   style={styles.searchBar}
                   placeholder="Search"
                   onChange={({ target }) => setSearchText(target.value)}
-                  value={text}
+                  value={searchText}
                 />
-                <Button style={styles.button} onClick={handleClick}>Clear</Button>
+                <Button style={styles.button} onClick={handleSearchClose}>Clear</Button>
               </InputGroup>
+              {!hasSubmittedSearch ? <></> : <Form.Select>
+                {searchResult.length === 0 ? <option>No Locations Found</option> : (
+                  searchResult.map((l, key) => <option value={l}>{displaySearchResult(l)}</option>)
+                )}
+              </Form.Select>}
             </Form>
-          : (
-            <Button style={styles.mainButtons} onClick={()=> setSearching(true)}>Search</Button>
           )}
         </View>
 
