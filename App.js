@@ -23,10 +23,6 @@ export default function App() {
   const [searchText, setSearchText] = useState("")
   const [searchResult, setSearchResult] = useState([])
 
-  // const weatherPath = (searchText) => {
-  //   return `http://localhost:5000/weather/${searchText}`
-  // };
-
   const displaySearchResult = words => {
     return words.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
   }
@@ -100,9 +96,6 @@ export default function App() {
           <Text>
             Temperature Display
           </Text>
-          {filterLocations.map(({data}) => (
-              <Text>{data}</Text>
-            ))}
         </View>
       </View>
      )}
