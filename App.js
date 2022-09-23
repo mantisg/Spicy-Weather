@@ -100,6 +100,9 @@ export default function App() {
           <Text>
             Temperature Display
           </Text>
+          {filterLocations.map(({data}) => (
+              <Text>{data}</Text>
+            ))}
         </View>
       </View>
      )}
