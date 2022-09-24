@@ -3,25 +3,46 @@ import {
   StyleSheet,
   Text,
   View,
-  // Button,
+// Button,
   TextInput,
   SearchBar,
 } from 'react-native';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 export default function App() {
 
   const [isSearching, setSearching] = useState(false)
+  const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false)
+  const [isInMenu, setMenu] = useState(false)
   const [isLoading, setLoading] = useState(true)
-  const [data, setData] = useState([])
+  const [locations, setLocations] = useState([])
+  const [searchText, setSearchText] = useState("")
+  const [searchResult, setSearchResult] = useState([])
+
+  const displaySearchResult = words => {
+    return words.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+  }
+
+  const handleSearchClose = () => {
+    setSearchText("")
+    setHasSubmittedSearch(false)
+  }
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    setHasSubmittedSearch(true)
+    setSearchResult(locations.filter(l => l.toLowerCase() === searchText.toLowerCase().replace(' ', '-')))
+  };
 
   const getLocations = async () => {
     try {
-      const response = await fetch('http://localhost:5000/locations')
+      const response = await fetch("http://localhost:5000/locations")
       const json = await response.json()
-      setData(json.data)
+      setLocations(json.data)
     } catch (error) {
       console.error(error)
     } finally {
@@ -35,18 +56,33 @@ export default function App() {
 
   return (
     <View>
-    {isLoading ? <Text>loading...</Text> : (
+    {isLoading ? <Text style={styles.loading}>loading...</Text> : (
       <View style={styles.container}>
         <View style={styles.headBand}>
-          <Button style={{backgroundColor:awesomeRed, borderColor:awesomeRed}}>Menu</Button>
+          {isInMenu ? <Text>Oh Shit</Text> : 
+            <Button style={styles.mainButtons} onClick={() => setMenu(true)}>Menu</Button>
+          }
           <Text style={styles.logo}>
             Spicy Forecast
           </Text>
-          {isSearching ? <TextInput
-            style={styles.searchBar}
-            placeholder="Search"
-          /> : (
-            <Button style={{backgroundColor:awesomeRed, borderColor:awesomeRed}} onClick={()=> setSearching(true)}>Search</Button>
+          {!isSearching ? <Button style={styles.mainButtons} onClick={()=> setSearching(true)}>Search</Button> :
+            (<Form onSubmit={handleSubmit}>
+              <InputGroup style={{width: 300}}>
+                <Button style={styles.button} onClick={()=> setSearching(false)}>X</Button>
+                <Form.Control
+                  style={styles.searchBar}
+                  placeholder="Search"
+                  onChange={({ target }) => setSearchText(target.value)}
+                  value={searchText}
+                />
+                <Button style={styles.button} onClick={handleSearchClose}>Clear</Button>
+              </InputGroup>
+              {!hasSubmittedSearch ? <></> : <Form.Select>
+                {searchResult.length === 0 ? <option>No Locations Found</option> : (
+                  searchResult.map((l, key) => <option key={key} value={l}>{displaySearchResult(l)}</option>)
+                )}
+              </Form.Select>}
+            </Form>
           )}
         </View>
 
@@ -61,7 +97,6 @@ export default function App() {
             Temperature Display
           </Text>
         </View>
-        {data.map((i, k) => <Text key={k}>{i}</Text>)}
       </View>
      )}
     </View>
@@ -110,6 +145,29 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     color: awesomeRed,
+    width: 'auto',
+  },
+
+  mainButtons: {
+    backgroundColor: awesomeRed,
+    borderColor: awesomeRed,
+  },
+
+  button: {
+    backgroundColor: awesomeRed,
+    borderWidth: 1,
+    width: 'auto',
+  },
+
+  loading: {
+    color: awesomeRed,
+    fontSize: 50,
+    textAlign: 'center',
+  },
+
+  tempDisplay: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
 });
